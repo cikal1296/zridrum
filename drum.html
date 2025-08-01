@@ -1,0 +1,167 @@
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <title>Neon Drum Kit</title>
+
+  <style>
+    /* === GLOBAL STYLE === */
+    body {
+      background-color: #0d0d0d; /* Warna dasar hitam gelap */
+      color: #00ffff; /* Warna teks default biru neon */
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center; /* Semua elemen tengah */
+    }
+
+    /* === JUDUL / HEADER === */
+    h1 {
+      font-size: 2rem;
+      text-shadow: 0 0 15px #00ffff, 0 0 30px #00ffff; /* Efek glow neon */
+      margin-bottom: 30px;
+    }
+
+    /* === WRAPPER GRID UNTUK TOMBOL-TOMBOL === */
+    .keys {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 20px;
+      width: 100%;
+      max-width: 600px; /* Biar ga terlalu lebar */
+    }
+
+    /* === TIAP TOMBOL === */
+    .key {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid #00ffff;
+      border-radius: 10px;
+      width: 100%;
+      aspect-ratio: 1/1; /* Biar bentuknya kotak otomatis */
+      background-color: #111; /* Warna gelap */
+      color: #00ffff;
+      font-size: 1.5rem;
+      transition: all 0.1s ease;
+      box-shadow: 0 0 10px #005566; /* Neon halus */
+    }
+
+    /* === HURUF DI TENGAH TOMBOL === */
+    .key kbd {
+      font-size: 2rem;
+      font-weight: bold;
+      text-shadow: 0 0 10px #00ffff; /* Glow huruf neon */
+    }
+
+    /* === NAMA SUARA DI BAWAH HURUF === */
+    .key span.sound {
+      font-size: 0.9rem;
+      color: #ffaa00;
+      text-shadow: 0 0 5px #ffaa00; /* Glow kuning */
+    }
+
+    /* === EFEK ANIMASI SAAT TOMBOL DIPENCET === */
+    .key.playing {
+      transform: scale(1.1); /* Membesar sedikit */
+      background-color: #002233; /* Biru tua */
+      box-shadow: 0 0 20px #00ffff, 0 0 30px #00ffff; /* Efek glow neon besar */
+      border-color: #00ffff;
+    }
+
+    /* === FOOTER BUAT KREDIT === */
+    footer {
+      margin-top: 40px;
+      font-size: 0.9rem;
+      color: #666;
+      text-align: center;
+      text-shadow: 0 0 5px #00ffff33; /* Efek bayangan samar */
+    }
+
+    /* === RESPONSIF UNTUK LAYAR KECIL === */
+    @media (max-width: 500px) {
+      h1 {
+        font-size: 1.5rem;
+      }
+      .key {
+        font-size: 1.2rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Judul Halaman -->
+  <h1>🎧 Neon Drum Kit</h1>
+
+  <!-- Kotak-kotak tombol -->
+  <div class="keys">
+    <div data-key="65" class="key">
+      <kbd>A</kbd>
+      <span class="sound">clap</span>
+    </div>
+    <div data-key="83" class="key">
+      <kbd>S</kbd>
+      <span class="sound">kick</span>
+    </div>
+    <div data-key="68" class="key">
+      <kbd>D</kbd>
+      <span class="sound">bass</span>
+    </div>
+    <div data-key="70" class="key">
+      <kbd>F</kbd>
+      <span class="sound">tuck</span>
+    </div>
+    <div data-key="71" class="key">
+      <kbd>G</kbd>
+      <span class="sound">clap</span>
+    </div>
+    <div data-key="72" class="key">
+      <kbd>H</kbd>
+      <span class="sound">clap</span>
+    </div>
+  </div>
+
+  <!-- Sound File (harus sesuai path dan file di folder lu) -->
+  <audio data-key="65" src="kick.wav"></audio>
+  <audio data-key="83" src="clap.wav"></audio>
+  <audio data-key="68" src="clap.wav"></audio>
+  <audio data-key="70" src="kick.wav"></audio>
+  <audio data-key="71" src="clap.wav"></audio>
+  <audio data-key="72" src="clap.wav"></audio>
+
+  <!-- Kredit -->
+  <footer>Created by Fazri</footer>
+
+  <!-- === JAVASCRIPT === -->
+  <script>
+    // Ketika tombol di-keyboard ditekan
+    window.addEventListener('keydown', function (e) {
+      // Ambil elemen <audio> yang sesuai dengan keyCode dari tombol yang ditekan
+      const audio = document.querySelector(`audio[data-key="${e.keyCode}"]`);
+
+      // Ambil elemen kotak tombol (div) berdasarkan data-key yang sama
+      const key = document.querySelector(`.key[data-key="${e.keyCode}"]`);
+
+      // Kalau tidak ditemukan audio, berhenti di sini (biar ga error)
+      if (!audio) return;
+
+      // Restart audio dari awal setiap kali dipencet
+      audio.currentTime = 0;
+      audio.play(); // Mainkan suara
+
+      // Tambahkan class 'playing' untuk animasi visual
+      key.classList.add('playing');
+
+      // Setelah 100ms, hapus class 'playing' supaya bisa animasi ulang
+      setTimeout(() => {
+        key.classList.remove('playing');
+      }, 100);
+    });
+  </script>
+</body>
+</html>
